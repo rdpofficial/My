@@ -1,5 +1,5 @@
         run: |
-          Write-Host "Tailscale IP: $env:TAILSCALE_IP"
+          Write-Host "Tailscale IP: 100.84.49.76"
           
           # Test connectivity using Test-NetConnection against the Tailscale IP on port 3389
           $testResult = Test-NetConnection -ComputerName $env:http://100.84.49.76 -Port 3389
@@ -12,9 +12,9 @@
       - name: Maintain Connection
         run: |
           Write-Host "`n=== RDP ACCESS ==="
-          Write-Host "Address: $env:TAILSCALE_IP"
+          Write-Host "Address: 100.84.49.76"
           Write-Host "Username: RDP"
-          Write-Host "Password: A0h>-wg426+zL|XC"
+          Write-Host "Password: mc6qrtvstw83;+%F?"
           Write-Host "==================`n"
           
           # Keep runner active indefinitely (or until manually cancelled)
