@@ -1,8 +1,3 @@
-name: 🖥️ RDP Connection Test
-
-on:
-  workflow_dispatch:
-
 jobs:
   check-rdp:
     runs-on: windows-latest
@@ -11,6 +6,14 @@ jobs:
         run: |
           Write-Host "🔌 Tailscale IP Detected: 100.84.49.76"
 
+      - name: 🛡️ Open RDP Port in Firewall (if on self-hosted runner)
+        run: |
+          New-NetFirewallRule -DisplayName "Allow RDP" `
+                             -Direction Inbound `
+                             -Protocol TCP `
+                             -LocalPort 3389 `
+                             -Action Allow
+
       - name: 🧪 Test RDP Connectivity (Port 3389)
         run: |
           Write-Host "🔎 Testing connectivity to 100.84.49.76:3389..."
@@ -18,31 +21,6 @@ jobs:
           
           if (-not $testResult.TcpTestSucceeded) {
               Write-Host "❌ TCP connection to RDP port 3389 failed!"
-              Write-Host "⚠️ Possible reasons:"
-              Write-Host "   - RDP service is not running on target machine"
-              Write-Host "   - Port 3389 is blocked by firewall"
-              Write-Host "   - GitHub runner cannot reach private Tailscale IP"
               exit 1
           }
-
           Write-Host "✅ TCP connectivity successful! RDP port is reachable."
-
-      - name: 🖥️ Maintain RDP Session
-        run: |
-          Write-Host ""
-          Write-Host "=============================="
-          Write-Host "       🔐 RDP ACCESS INFO      "
-          Write-Host "=============================="
-          Write-Host "📍 Address : 100.84.49.76"
-          Write-Host "👤 Username: RDP"
-          Write-Host "🔑 Password: mc6qrtvstw83;+%F?"
-          Write-Host "=============================="
-          Write-Host ""
-          Write-Host "💡 Tip: Use 'mstsc' in Windows or any RDP client to connect."
-          Write-Host ""
-
-          # Keep GitHub Actions runner alive for ~24 hours
-          while ($true) {
-              Write-Host "[$(Get-Date)] 🟢 RDP Active - Press Ctrl+C in workflow to terminate"
-              Start-Sleep -Seconds 300
-          }
