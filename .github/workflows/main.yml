@@ -1,8 +1,18 @@
+name: RDP Connection Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  check-rdp:
+    runs-on: windows-latest
+    steps:
+      - name: Test Connectivity
         run: |
           Write-Host "Tailscale IP: 100.84.49.76"
           
           # Test connectivity using Test-NetConnection against the Tailscale IP on port 3389
-          $testResult = Test-NetConnection -ComputerName $env:http://100.84.49.76 -Port 3389
+          $testResult = Test-NetConnection -ComputerName "100.84.49.76" -Port 3389
           if (-not $testResult.TcpTestSucceeded) {
               Write-Error "TCP connection to RDP port 3389 failed"
               exit 1
